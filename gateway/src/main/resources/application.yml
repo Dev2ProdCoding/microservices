@@ -1,0 +1,30 @@
+server:
+  port: 8888
+
+spring:
+  application:
+    name: gateway
+  cloud:
+    gateway:
+      routes:
+        - id: productServiceRoute
+          predicates:
+            - Path=/products/**
+          uri: lb://product-service
+          filters:
+            - AddResponseHeader=X-RESPONSE-HEADER, ProductServiceRSP Header
+    discovery:
+      locator:
+        lower-case-service-id: true
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8083/eureka
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  security:
+    enabled: false
